@@ -27,13 +27,21 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/appointments', [AppointmentController::class, 'store']);
     Route::get('/appointments', [AppointmentController::class, 'index']);
     Route::get('/appointments/{id}', [AppointmentController::class, 'show']);
+    Route::get('/appointments/{id}', [AppointmentController::class, 'showForDoctor']);
+
+
+    Route::put('/appointmentsApprove/{id}', [AppointmentController::class, 'approveAppointment']);
     Route::put('/appointments/{id}', [AppointmentController::class, 'update']);
     Route::delete('/appointments/{id}', [AppointmentController::class, 'destroy']);
+    Route::get('/doctor/records/{id}', [RecordController::class, 'getRecord']);
 
     // Medical Records
     Route::get('/records', [RecordController::class, 'index']);
     Route::post('/records', [RecordController::class, 'store']);
     Route::get('/records/{id}', [RecordController::class, 'show']);
+    Route::get('/getDoctorsRecord/{id}', [RecordController::class, 'getDoctorRecords']);
+    Route::put('/updateRecord/{id}', [RecordController::class, 'updateRecord']);
+
     Route::put('/records/{id}', [RecordController::class, 'update']);
     Route::delete('/records/{id}', [RecordController::class, 'destroy']);
 });

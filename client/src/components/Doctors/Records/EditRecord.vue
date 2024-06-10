@@ -17,101 +17,58 @@
 
     <div class="flex flex-col space-y-4 p-4 bg-white rounded-lg shadow-md">
       <div class="space-y-5">
+        <!-- Name -->
         <div>
-          <label
-            for="name"
-            class="block mb-2 text-sm font-medium text-gray-600 dark:text-white"
-            >Name</label
-          >
-          <input
-            type="text"
-            id="name"
-            class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:outline-none focus:ring focus:ring-blue-500 block w-full p-2.5"
-            placeholder="Dr. John Doe"
-            required
-          />
+          <label for="name" class="block mb-2 text-sm font-medium text-gray-600 dark:text-white">Name</label>
+          <input type="text" id="name" :value="record.name" readonly class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:outline-none focus:ring focus:ring-blue-500 block w-full p-2.5"/>
         </div>
 
+        <!-- When (Appointment Date) -->
         <div>
-          <label
-            for="date"
-            class="block mb-2 text-sm font-medium text-gray-600 dark:text-white"
-            >When</label
-          >
-
-          <div class="relative max-w-sm">
-            <div
-              class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none"
-            >
-              <svg
-                class="w-4 h-4 text-gray-500 dark:text-gray-400"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-              >
-                <path
-                  d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"
-                />
-              </svg>
-            </div>
-            <input
-              datepicker
-              datepicker-autohide
-              datepicker-buttons
-              datepicker-autoselect-today
-              type="text"
-              class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              placeholder="Select date"
-            />
-          </div>
+          <label for="date" class="block mb-2 text-sm font-medium text-gray-600 dark:text-white">When</label>
+          <input type="text" id="date" :value="record.appointmentDate" readonly class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/>
         </div>
+
+        <!-- Gender -->
         <div>
-          <label
-            for="gender"
-            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-            >Gender</label
-          >
-          <select
-            id="gender"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          >
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
+          <label for="gender" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Gender</label>
+          <input type="text" id="gender" :value="record.gender" readonly class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/>
+        </div>
+
+        <!-- Age -->
+        <div>
+          <label for="age" class="block mb-2 text-sm font-medium text-gray-600 dark:text-white">Age</label>
+          <input type="number" id="age" :value="record.age" readonly class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:outline-none focus:ring focus:ring-blue-500 block w-full p-2.5"/>
+        </div>
+
+        
+        <!-- Age -->
+        <div>
+          <label for="age" class="block mb-2 text-sm font-medium text-gray-600 dark:text-white">Description</label>
+          <input type="text" id="description" :value="record.description" readonly class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:outline-none focus:ring focus:ring-blue-500 block w-full p-2.5"/>
+        </div>
+        
+
+        <!-- Remarks/ Findings -->
+        <div>
+          <label for="remarks" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Remarks</label>
+          <textarea id="remarks" v-model="record.findings" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"></textarea>
+        </div>
+
+        <!-- Payment Status -->
+        <div>
+          <label for="paymentStatus" class="block mb-2 text-sm font-medium text-gray-600 dark:text-white">Payment Status</label>
+          <select id="paymentStatus" v-model="record.paymentStatus" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+            <option value="Pending">Pending</option>
+            <option value="Paid">Paid</option>
           </select>
-        </div>
-
-        <div>
-          <label
-            class="block mb-2 text-sm font-medium text-gray-600 dark:text-white"
-            >Age</label
-          >
-          <input
-            type="number"
-            id="age"
-            class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:outline-none focus:ring focus:ring-blue-500 block w-full p-2.5"
-            required
-          />
-        </div>
-
-        <div>
-          <label
-            for="message"
-            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-            >Remarks</label
-          >
-          <textarea
-            id="message"
-            rows="4"
-            class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder=""
-          ></textarea>
         </div>
       </div>
     </div>
-
     <div class="flex justify-end">
       <button
+      @click="updateRecord"
+
         class="text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-blue-500 font-medium rounded-lg p-2 text-center w-24"
       >
         Update
@@ -120,8 +77,26 @@
   </div>
 </template>
 <script>
+import axios from 'axios';
+
 export default {
   name: "EditPatients",
+
+  data() {
+    return {
+      recordId: null,
+      record: {
+        name: "",
+        appointmentDate: "",
+        gender: "",
+        age: "",
+        remarks: "",
+        findings: "",
+        paymentStatus: "",
+        description: "",
+      }
+    };
+  },
 
   methods: {
     goToPatients() {
@@ -129,6 +104,50 @@ export default {
         window.location.reload();
       });
     },
+
+    updateRecord() {
+      axios.put(`http://127.0.0.1:8000/api/updateRecord/${this.recordId}`, {
+        findings: this.record.findings,
+        payment_status: this.record.paymentStatus
+      }, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      })
+      .then(response => {
+        console.log(response.data);
+        this.$router.push(`/doctor/editRecordsD`);
+      })
+      .catch(error => {
+        console.error(error);
+      });
+    },
+
+    fetchRecord() {
+      axios.get(`http://127.0.0.1:8000/api/doctor/records/${this.recordId}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      })
+      .then(response => {
+        const { record } = response.data;
+        this.record.name = record.appointment.patient.name;
+        this.record.appointmentDate = record.appointment.appointment_date;
+        this.record.gender = record.appointment.patient.Gender;
+        this.record.age = record.appointment.patient.Age;
+        this.record.findings = record.findings;
+        this.record.paymentStatus = record.payment_status;
+this.record.description = record.appointment.description;
+      })
+      .catch(error => {
+        console.error(error);
+      });
+    },
   },
+
+  mounted() {
+    this.recordId = this.$route.params.recordId;
+    this.fetchRecord();
+  }
 };
 </script>

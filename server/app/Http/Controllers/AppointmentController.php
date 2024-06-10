@@ -24,12 +24,26 @@ class AppointmentController extends Controller
             ->join('users', 'appointments.doctor_id', '=', 'users.id')
             ->select('appointments.*', 'users.name as doctor_name')
             ->where('appointments.patient_id', '=', $patient_id);
-        \Log::info($query->toSql());
     
         $appointments = $query->get();
     
         return response()->json($appointments);
     }
+    
+    public function showForDoctor(Request $request)
+{
+    $doctor_id = $request->query('doctor_id');
+
+    $query = DB::table('appointments')
+        ->join('users', 'appointments.patient_id', '=', 'users.id')
+        ->select('appointments.*', 'users.name as patient_name')
+        ->where('appointments.doctor_id', '=', $doctor_id);
+
+    $appointments = $query->get();
+
+    return response()->json($appointments);
+}
+
     
     
     public function store(Request $request)
@@ -72,6 +86,35 @@ class AppointmentController extends Controller
 
         return response()->json($appointment);
     }
+
+    public function approveAppointment(Request $request, $id)
+{
+    $validated = $request->validate([
+        'appointment_id' => 'required|exists:appointments,id',
+    ]);
+
+    $appointment_id = $validated['appointment_id'];
+
+    DB::transaction(function () use ($appointment_id) {
+        DB::table('appointments')
+            ->where('id', $appointment_id)
+            ->update(['status' => 'Approved']);
+
+        $appointment = DB::table('appointments')->where('id', $appointment_id)->first();
+
+        DB::table('records')->insert([
+            'appointment_id' => $appointment_id,
+            'doctor_id' => $appointment->doctor_id,
+            'findings' => '',
+            'payment_status' => 'Pending',
+            
+        ]);
+    });
+
+    return response()->json([
+        'message' => 'Appointment approved and record created successfully.'
+    ]);
+}
 
 
     

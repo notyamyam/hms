@@ -216,11 +216,11 @@ const routes = [
       },
 
       {
-        path: "editRecordsD",
+        path: "editRecordsD/:recordId",
         name: "editRecordsD",
         component: EditRecord,
         meta: { requiresAuth: true },
-      },
+      }      
     ],
   },
 

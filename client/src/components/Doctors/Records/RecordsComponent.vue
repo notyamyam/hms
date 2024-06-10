@@ -18,29 +18,37 @@
             <th scope="col" class="px-6 py-3">When</th>
             <th scope="col" class="px-6 py-3">Gender</th>
             <th scope="col" class="px-6 py-3">Age</th>
+            <th scope="col" class="px-6 py-3">Description</th>
             <th scope="col" class="px-6 py-3">Remarks</th>
+            <th scope="col" class="px-6 py-3">Payment Status</th>
+
             <th scope="col" class="px-6 py-3">Action</th>
           </tr>
         </thead>
         <tbody>
           <tr
+            v-for="record in records"
+            :key="record.id"
             class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
           >
             <th
               scope="row"
               class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
             >
-              Samantha Cruz
+              {{ record.patient_name }}
             </th>
-            <td class="px-6 py-4 space-x-3">June 20, 2024</td>
+            <td class="px-6 py-4 space-x-3">{{ record.appointment_date }}</td>
+            <td class="px-6 py-4 space-x-3">{{ record.patient_gender }}</td>
+            <td class="px-6 py-4 space-x-3">{{ record.patient_age }}</td>
+            <td class="px-6 py-4 space-x-3">{{ record.description }}</td>
 
-            <td class="px-6 py-4 space-x-3">Female</td>
-            <td class="px-6 py-4 space-x-3">21</td>
-            <td class="px-6 py-4 space-x-3">Check-Up (Heart)</td>
+            <td class="px-6 py-4 space-x-3">{{ record.remarks }}</td>
+            <td class="px-6 py-4 space-x-3">{{ record.payment_status }}</td>
+
             <td class="px-6 py-4 space-x-3">
               <button
                 class="font-medium text-blue-500 hover:underline"
-                @click="goToEditRecord"
+                @click="goToEditRecord(record.id)"
               >
                 Edit
               </button>
@@ -53,15 +61,42 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   name: "RecordsComponentD",
 
+  data() {
+    return {
+      records: []
+    };
+  },
+
   methods: {
-    goToEditRecord() {
-      this.$router.push("/doctor/editRecordsD").then(() => {
+    goToEditRecord(recordId) {
+      this.$router.push(`/doctor/editRecordsD/${recordId}`).then(() => {
         window.location.reload();
       });
     },
+    
+    fetchRecords() {
+      const doctorId = localStorage.getItem('userId');
+      axios.get(`http://127.0.0.1:8000/api/getDoctorsRecord/${doctorId}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      })
+      .then(response => {
+        this.records = response.data;
+      })
+      .catch(error => {
+        console.error(error);
+      });
+    },
   },
+
+  mounted() {
+    this.fetchRecords();
+  }
 };
 </script>
