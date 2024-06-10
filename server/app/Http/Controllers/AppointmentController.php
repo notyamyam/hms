@@ -38,7 +38,7 @@ class AppointmentController extends Controller
         ->join('users', 'appointments.patient_id', '=', 'users.id')
         ->select('appointments.*', 'users.name as patient_name')
         ->where('appointments.doctor_id', '=', $doctor_id);
-
+        
     $appointments = $query->get();
 
     return response()->json($appointments);
@@ -69,23 +69,37 @@ class AppointmentController extends Controller
         return response()->json($appointment, 201);
     }
     
-
-    public function update(Request $request, $id)
+    public function catch($id)
     {
-        $appointment = Appointment::findOrFail($id);
-
-        $request->validate([
-            'patient_id' => 'exists:users,id',
-            'doctor_id' => 'exists:users,id',
-            'description' => 'string',
-            'status' => 'string',
-            'appointment_date' => 'date',
-        ]);
-
-        $appointment->update($request->all());
-
+        $appointment = DB::table('appointments')
+            ->select('appointments.*', 'users.name as patient_name')
+            ->join('users', 'users.id', '=', 'appointments.patient_id')
+            ->where('appointments.id', $id)
+            ->first();
+    
         return response()->json($appointment);
     }
+
+    public function updateDate(Request $request, $id)
+    {
+        $request->validate([
+            'appointment_date' => 'required|date',
+        ]);
+    
+        $affected = DB::table('appointments')
+                        ->where('id', $id)
+                        ->update(['appointment_date' => $request->input('appointment_date')]);
+    
+        if ($affected) {
+            $appointment = DB::table('appointments')->find($id);
+            return response()->json($appointment);
+        } else {
+            return response()->json(['error' => 'Appointment not found'], 404);
+        }
+    }
+    
+    
+  
 
     public function approveAppointment(Request $request, $id)
 {
@@ -115,6 +129,27 @@ class AppointmentController extends Controller
         'message' => 'Appointment approved and record created successfully.'
     ]);
 }
+
+
+public function denyAppointment(Request $request, $id)
+{
+    $validated = $request->validate([
+        'appointment_id' => 'required|exists:appointments,id',
+    ]);
+
+    $appointment_id = $validated['appointment_id'];
+
+        DB::table('appointments')
+            ->where('id', $appointment_id)
+            ->update(['status' => 'Denied']);
+
+            return response()->json([
+                'message' => 'Appointment denied.'
+            ]);
+    }
+    
+
+
 
 
     

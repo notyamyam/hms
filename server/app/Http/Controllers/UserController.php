@@ -6,7 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Validation\ValidationException;
-
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 class UserController extends Controller
 {
     // public function index()
@@ -16,18 +17,15 @@ class UserController extends Controller
     // }
 
     public function index($id = null)
-    {
-        if ($id) {
-            $users = User::find($id);
-    
-            return response()->json($users);
-           
-        } else {
-            $users = User::all();
-         
-            return response()->json($users);
-        }
+{
+    if ($id) {
+        $user = DB::table('users')->where('id', $id)->first();
+        return response()->json($user);
+    } else {
+        $users = DB::table('users')->get();
+        return response()->json($users);
     }
+}
 
     //trying different approach
     // public function store(Request $request){
@@ -54,17 +52,25 @@ class UserController extends Controller
 
     public function update(Request $request, $id)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users,email,' . $id,
-            'status' => 'required|string|in:Active,Deactivated',
+        $request->validate([
+            'email' => 'required|email',
+            'name' => 'required',
+            'gender' => 'required',
+            'age' => 'required|integer'
         ]);
-
-        $user = User::findOrFail($id);
-        $user->update($validated);
-
-        return response()->json(['message' => 'User updated successfully'], 200);
+    
+        DB::table('users')
+            ->where('id', $id)
+            ->update([
+                'email' => $request->email,
+                'name' => $request->name,
+                'gender' => $request->gender,
+                'age' => $request->age,
+            ]);
+    
+        return response()->json(['message' => 'User profile updated successfully'], 200);
     }
+    
 
     public function destroy($id)
     {

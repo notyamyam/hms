@@ -100,11 +100,6 @@ export default {
     return {
       open: true,
       menus: [
-        {
-          title: "My Records",
-          icon: "md-personalinjury-outlined",
-          routeName: "myRecords",
-        },
 
         {
           title: "Appointments",

@@ -12,7 +12,8 @@ Route::post('/login', [LoginController::class, 'authenticate']);
 Route::post('/logout', [LogoutController::class, 'logout'])->name('logout');
 
 Route::post('/register', [UserController::class, 'store'])->name('users.store');
-Route::get('/users', [UserController::class, 'index'])->name('find');
+Route::get('/users/{id?}', [UserController::class, 'index']);
+Route::put('/update/{id}', [UserController::class, 'update']);
 
 Route::get('/doctors', function (Request $request) {
     $doctors = User::where('user_type', 'Doctor')->select('id', 'name')->get();
@@ -28,12 +29,16 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/appointments', [AppointmentController::class, 'index']);
     Route::get('/appointments/{id}', [AppointmentController::class, 'show']);
     Route::get('/appointments/{id}', [AppointmentController::class, 'showForDoctor']);
+    Route::get('/appointmentCatch/{id}', [AppointmentController::class, 'catch']);
 
 
     Route::put('/appointmentsApprove/{id}', [AppointmentController::class, 'approveAppointment']);
+    Route::put('/denyAppointment/{id}', [AppointmentController::class, 'denyAppointment']);
+
     Route::put('/appointments/{id}', [AppointmentController::class, 'update']);
     Route::delete('/appointments/{id}', [AppointmentController::class, 'destroy']);
     Route::get('/doctor/records/{id}', [RecordController::class, 'getRecord']);
+    Route::put('/updateDate/{id}', [AppointmentController::class, 'updateDate']);
 
     // Medical Records
     Route::get('/records', [RecordController::class, 'index']);
@@ -41,7 +46,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/records/{id}', [RecordController::class, 'show']);
     Route::get('/getDoctorsRecord/{id}', [RecordController::class, 'getDoctorRecords']);
     Route::put('/updateRecord/{id}', [RecordController::class, 'updateRecord']);
+    Route::get('/getPatientRecord/{id}', [RecordController::class, 'getPatientRecord']);
 
     Route::put('/records/{id}', [RecordController::class, 'update']);
     Route::delete('/records/{id}', [RecordController::class, 'destroy']);
+
+    
+
 });

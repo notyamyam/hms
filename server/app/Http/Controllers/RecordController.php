@@ -43,6 +43,27 @@ class RecordController extends Controller
     return response()->json($records);
 }
 
+public function getPatientRecord($patientId)
+{
+    $records = DB::table('records')
+        ->join('appointments', 'records.appointment_id', '=', 'appointments.id')
+        ->join('users', 'appointments.patient_id', '=', 'users.id')
+        ->select(
+            'records.*',
+            'users.name as patient_name',
+            'users.gender as patient_gender',
+            'users.age as patient_age',
+            'appointments.appointment_date',
+            'appointments.description'
+
+        )
+        ->where('appointments.patient_id', $patientId)
+        ->get();
+
+    return response()->json($records);
+}
+
+
  
 
 

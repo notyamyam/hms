@@ -25,14 +25,13 @@
           <label
             for="name"
             class="block mb-2 text-sm font-medium text-gray-600 dark:text-white"
-            >Name</label
-          >
+          >Name</label>
           <input
             type="text"
             id="name"
             class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:outline-none focus:ring focus:ring-blue-500 block w-full p-2.5"
-            placeholder="Dr. John Doe"
-            required
+            :value="appointment.patient_name"
+            disabled
           />
         </div>
 
@@ -40,35 +39,28 @@
           <label
             for="date"
             class="block mb-2 text-sm font-medium text-gray-600 dark:text-white"
-            >When</label
-          >
+          >Date and Time</label>
+          <input
+            type="datetime-local" 
+            id="date"
+            class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            v-model="appointment.appointment_date"
+          />
+        </div>
 
-          <div class="relative max-w-sm">
-            <div
-              class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none"
-            >
-              <svg
-                class="w-4 h-4 text-gray-500 dark:text-gray-400"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-              >
-                <path
-                  d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"
-                />
-              </svg>
-            </div>
-            <input
-              datepicker
-              datepicker-autohide
-              datepicker-buttons
-              datepicker-autoselect-today
-              type="text"
-              class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              placeholder="Select date"
-            />
-          </div>
+        
+
+        <div class="mb-5">
+          <label
+            for="description"
+            class="block mb-2 text-sm font-medium text-gray-600 dark:text-white"
+          >Description</label>
+          <textarea
+            id="description"
+            class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            :value="appointment.description"
+            disabled
+          ></textarea>
         </div>
       </div>
     </div>
@@ -76,15 +68,26 @@
     <div class="flex justify-end">
       <button
         class="text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-blue-500 font-medium rounded-lg p-2 text-center w-24"
+        @click="updateAppointment"
       >
         Update
       </button>
     </div>
   </div>
 </template>
+
+
 <script>
+import axios from 'axios';
+
 export default {
   name: "EditAppointment",
+
+  data() {
+    return {
+      appointment: {},
+    };
+  },
 
   methods: {
     goToRecords() {
@@ -92,6 +95,53 @@ export default {
         window.location.reload();
       });
     },
+
+    fetchAppointment() {
+      const token = localStorage.getItem("token");
+
+      axios.get(`http://127.0.0.1:8000/api/appointmentCatch/${this.appointmentId}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
+        .then(response => {
+          this.appointment = response.data;
+        })
+        .catch(error => {
+          console.error(error);
+        });
+    },
+
+    updateAppointment() {
+    const token = localStorage.getItem("token");
+
+    axios.put(`http://127.0.0.1:8000/api/updateDate/${this.appointmentId}`, { appointment_date: this.appointment.appointment_date }, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    })
+    .then(response => {
+        console.log(response.data);
+        this.appointment = response.data;
+
+        this.$nextTick(() => {
+            this.appointment.appointment_date = response.data.appointment_date;
+        });
+        this.$router.push("/doctor/myappointments").then(() => {
+        window.location.reload();
+      });
+        
+    })
+    .catch(error => {
+        console.error(error);
+    });
+}
+
   },
+
+  mounted() {
+    this.appointmentId = this.$route.params.appointmentId; 
+    this.fetchAppointment();
+  }
 };
 </script>

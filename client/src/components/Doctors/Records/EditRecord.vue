@@ -116,7 +116,7 @@ export default {
       })
       .then(response => {
         console.log(response.data);
-        this.$router.push(`/doctor/editRecordsD`);
+        this.$router.push(`/doctor/recordsD`);
       })
       .catch(error => {
         console.error(error);

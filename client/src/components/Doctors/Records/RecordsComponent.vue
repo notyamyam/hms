@@ -42,7 +42,7 @@
             <td class="px-6 py-4 space-x-3">{{ record.patient_age }}</td>
             <td class="px-6 py-4 space-x-3">{{ record.description }}</td>
 
-            <td class="px-6 py-4 space-x-3">{{ record.remarks }}</td>
+            <td class="px-6 py-4 space-x-3">{{ record.findings }}</td>
             <td class="px-6 py-4 space-x-3">{{ record.payment_status }}</td>
 
             <td class="px-6 py-4 space-x-3">

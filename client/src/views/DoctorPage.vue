@@ -105,11 +105,7 @@ export default {
           icon: "md-personaddalt",
           routeName: "myprofile",
         },
-        {
-          title: "Patient",
-          icon: "md-personalinjury-outlined",
-          routeName: "patientsD",
-        },
+      
 
         {
           title: "My Appointments",

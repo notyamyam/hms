@@ -202,7 +202,7 @@ const routes = [
       },
 
       {
-        path: "editAppointment",
+        path: "editAppointment/:appointmentId",
         name: "editAppointment",
         component: EditAppointment,
         meta: { requiresAuth: true },
@@ -252,7 +252,7 @@ const routes = [
       },
 
       {
-        path: "editAppointmentP",
+        path: "editAppointmentP/:appointmentId",
         name: "editAppointmentP",
         component: EditAppointmentP,
         meta: { requiresAuth: true },
