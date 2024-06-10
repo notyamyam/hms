@@ -63,6 +63,26 @@ public function getPatientRecord($patientId)
     return response()->json($records);
 }
 
+public function getAdminRecord()
+{
+    $records = DB::table('records')
+        ->join('appointments', 'records.appointment_id', '=', 'appointments.id')
+        ->join('users as patients', 'appointments.patient_id', '=', 'patients.id')
+        ->join('users as doctors', 'appointments.doctor_id', '=', 'doctors.id')
+        ->select(
+            'records.*',
+            'patients.name as patient_name',
+            'patients.gender as patient_gender',
+            'patients.age as patient_age',
+            'doctors.name as doctor_name',
+            'appointments.appointment_date',
+            'appointments.description'
+        )
+        ->get();
+
+    return $records;
+}
+
 
  
 

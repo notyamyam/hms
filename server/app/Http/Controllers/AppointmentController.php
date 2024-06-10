@@ -169,6 +169,25 @@ public function denyAppointment(Request $request, $id)
                 'message' => 'Appointment denied.'
             ]);
     }
+
+
+
+    public function getAdminAppointments()
+{
+    $appointments = DB::table('appointments')
+        ->join('users as patients', 'appointments.patient_id', '=', 'patients.id')
+        ->join('users as doctors', 'appointments.doctor_id', '=', 'doctors.id')
+        ->select(
+            'appointments.description',
+            'appointments.appointment_date',
+            'patients.name as patient_name',
+            'doctors.name as doctor_name'
+        )
+        ->get();
+
+    return $appointments;
+}
+
     
 
 

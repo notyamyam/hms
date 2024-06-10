@@ -30,6 +30,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/appointments/{id}', [AppointmentController::class, 'show']);
     Route::get('/appointments/{id}', [AppointmentController::class, 'showForDoctor']);
     Route::get('/appointmentCatch/{id}', [AppointmentController::class, 'catch']);
+    Route::get('/getAdminAppointments', [AppointmentController::class, 'getAdminAppointments']);
 
 
     Route::put('/appointmentsApprove/{id}', [AppointmentController::class, 'approveAppointment']);
@@ -48,6 +49,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/getDoctorsRecord/{id}', [RecordController::class, 'getDoctorRecords']);
     Route::put('/updateRecord/{id}', [RecordController::class, 'updateRecord']);
     Route::get('/getPatientRecord/{id}', [RecordController::class, 'getPatientRecord']);
+    Route::get('/getAdminRecord', [RecordController::class, 'getAdminRecord']);
 
     Route::put('/records/{id}', [RecordController::class, 'update']);
     Route::delete('/records/{id}', [RecordController::class, 'destroy']);
