@@ -66,15 +66,13 @@ class UserController extends Controller
         return response()->json(['message' => 'User updated successfully'], 200);
     }
 
-    public function deactivate($id)
+    public function destroy($id)
     {
-        $user = User::findOrFail($id);
-        $user->status = $user->status === 'Active' ? 'Deactivated' : 'Active';
-        $user->save();
+        $appointment = User::findOrFail($id);
+        $appointment->delete();
 
-        return response()->json(['message' => 'User status updated successfully'], 200);
+        return response()->noContent();
     }
-
     
 
     public function store(Request $request)

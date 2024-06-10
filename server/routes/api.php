@@ -4,47 +4,36 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
-use App\Http\Controllers\CommentController;
-use App\Http\Controllers\ProductStockController;
-use App\Http\Controllers\ProductController;
-use App\Http\Controllers\CartController;
-
-use Illuminate\Http\Request;
-use App\Models\Product;
+use App\Http\Controllers\AppointmentController;
+use App\Http\Controllers\RecordController;
+use App\Models\User;
 
 Route::post('/login', [LoginController::class, 'authenticate']);
 Route::post('/logout', [LogoutController::class, 'logout'])->name('logout');
 
 Route::post('/register', [UserController::class, 'store'])->name('users.store');
-Route::get('/users', [UserController::class, 'index'])->name('users.store');
+Route::get('/users', [UserController::class, 'index'])->name('find');
 
-Route::get('/products/check', function (Request $request) {
-    $exists = Product::where('name', $request->query('name'))->exists();
-    return response()->json(['exists' => $exists]);
+Route::get('/doctors', function (Request $request) {
+    $doctors = User::where('user_type', 'Doctor')->select('id', 'name')->get();
+    return response()->json($doctors);
 });
 
-Route::put('/update/{id}', [ProductController::class, 'update']);
-Route::get('/users', [UserController::class, 'index']);
+Route::middleware('auth:sanctum')->group(function () {
 
-Route::get('/stocks', [ProductStockController::class, 'getAllStockItems']);
-Route::get('/cart/{id}', [CartController::class, 'getAllCarts']);
-Route::post('/checkout', [CartController::class, 'checkout']);
+    Route::delete('/delete/{id}', [UserController::class, 'destroy']);
 
-Route::delete('/cart/{id}', [CartController::class, 'deleteCart']);
+    // Appointments
+    Route::post('/appointments', [AppointmentController::class, 'store']);
+    Route::get('/appointments', [AppointmentController::class, 'index']);
+    Route::get('/appointments/{id}', [AppointmentController::class, 'show']);
+    Route::put('/appointments/{id}', [AppointmentController::class, 'update']);
+    Route::delete('/appointments/{id}', [AppointmentController::class, 'destroy']);
 
-Route::middleware(['auth:sanctum'])->group(function () {
-    Route::get('products/{id?}', [ProductController::class, 'index']);
-    Route::post('/cart', [CartController::class, 'addToCart']);
-    Route::post('/products', [ProductStockController::class, 'addProductAndStock']);
-    Route::put('/stocks/{id}', [ProductStockController::class, 'updateStock']);
-    Route::delete('/products/{id}', [ProductStockController::class, 'deleteProduct']);
-    Route::delete('/stocks/{id}', [ProductStockController::class, 'deleteStock']);
-    Route::get('/stocks/{id}', [ProductStockController::class, 'getUserStock']);
-    Route::get('/products/{id}', [ProductStockController::class, 'getProduct']);
-
-    Route::post('/users', [UserController::class, 'store']);
-    Route::put('/users/{id?}', [UserController::class, 'update']);
-    Route::put('/users/deactivate/{id}', [UserController::class, 'deactivate']);
-
-    Route::delete('/products/{id}', [ProductController::class, 'destroy']);
+    // Medical Records
+    Route::get('/records', [RecordController::class, 'index']);
+    Route::post('/records', [RecordController::class, 'store']);
+    Route::get('/records/{id}', [RecordController::class, 'show']);
+    Route::put('/records/{id}', [RecordController::class, 'update']);
+    Route::delete('/records/{id}', [RecordController::class, 'destroy']);
 });

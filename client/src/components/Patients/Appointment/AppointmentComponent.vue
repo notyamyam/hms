@@ -31,27 +31,28 @@
         </thead>
         <tbody>
           <tr
+            v-for="appointment in appointments"
+            :key="appointment.id"
             class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
           >
             <th
               scope="row"
               class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
             >
-              Dr. Juan Ramirez
+              {{ appointment.doctor.name }}
             </th>
-            <td class="px-6 py-4 space-x-3">June 20, 2024</td>
+            <td class="px-6 py-4 space-x-3">{{ appointment.appointment_date }}</td>
             <td class="px-6 py-4 space-x-3">
               <button
                 class="font-medium text-blue-500 hover:underline"
-                @click="goToEditAppointment"
+                @click="goToEditAppointment(appointment.id)"
               >
                 Edit
               </button>
 
               <button
-                data-modal-target="popup-modal"
-                data-modal-toggle="popup-modal"
                 class="font-medium text-red-500 hover:underline"
+                @click="confirmCancel(appointment.id)"
               >
                 Cancel
               </button>
@@ -73,7 +74,7 @@
         <button
           type="button"
           class="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-          data-modal-hide="popup-modal"
+          @click="closeModal"
         >
           <svg
             class="w-3 h-3"
@@ -112,14 +113,14 @@
             Are you sure you want to cancel this appointment?
           </h3>
           <button
-            data-modal-hide="popup-modal"
+            @click="cancelAppointment"
             type="button"
             class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center"
           >
             Yes, I'm sure
           </button>
           <button
-            data-modal-hide="popup-modal"
+            @click="closeModal"
             type="button"
             class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
           >
@@ -130,23 +131,71 @@
     </div>
   </div>
 </template>
-
 <script>
+import axios from 'axios';
+
 export default {
-  name: "EditAppointment",
-
-  methods: {
-    goToBookAppointment() {
-      this.$router.push("/patient/bookAppointmentP").then(() => {
-        window.location.reload();
-      });
-    },
-
-    goToEditAppointment() {
-      this.$router.push("/patient/editAppointmentP").then(() => {
-        window.location.reload();
-      });
-    },
+  name: "AppointmentComponent",
+  data() {
+    return {
+      appointments: [],
+      appointmentToCancel: null
+    };
   },
+  methods: {
+  fetchAppointments() {
+    const patientId = localStorage.getItem('userId');
+
+    axios.get(`http://127.0.0.1:8000/api/appointments?patient_id=${patientId}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    })
+    .then(response => {
+      this.appointments = response.data;
+      console.log('Appointments:', response.data); 
+
+    })
+    .catch(error => {
+      console.error('Error fetching appointments:', error);
+
+    });
+  },
+  goToBookAppointment() {
+    this.$router.push("/patient/bookAppointmentP").then(() => {
+      window.location.reload();
+    });
+  },
+  goToEditAppointment(id) {
+    this.$router.push(`/patient/editAppointmentP/${id}`).then(() => {
+      window.location.reload();
+    });
+  },
+  confirmCancel(id) {
+    this.appointmentToCancel = id;
+    document.getElementById('popup-modal').classList.remove('hidden');
+  },
+  closeModal() {
+    document.getElementById('popup-modal').classList.add('hidden');
+  },
+  cancelAppointment() {
+    axios.delete(`http://127.0.0.1:8000/api/appointments/${this.appointmentToCancel}`,{
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },})
+      .then(() => {
+        this.fetchAppointments();
+        this.closeModal();
+      })
+      .catch(error => {
+        console.error('Error cancelling appointment:', error);
+      });
+  }
+},
+
+  mounted() {
+    this.fetchAppointments();
+  }
 };
 </script>
+
