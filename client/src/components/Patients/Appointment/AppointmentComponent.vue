@@ -26,6 +26,8 @@
           <tr>
             <th scope="col" class="px-6 py-3">Doctor</th>
             <th scope="col" class="px-6 py-3">When</th>
+            <th scope="col" class="px-6 py-3">Description</th>
+
             <th scope="col" class="px-6 py-3">Action</th>
           </tr>
         </thead>
@@ -42,6 +44,8 @@
               {{ appointment.doctor.name }}
             </th>
             <td class="px-6 py-4 space-x-3">{{ appointment.appointment_date }}</td>
+            <td class="px-6 py-4 space-x-3">{{ appointment.description }}</td>
+
             <td class="px-6 py-4 space-x-3">
               <button
                 class="font-medium text-blue-500 hover:underline"

@@ -27,14 +27,30 @@
             class="block mb-2 text-sm font-medium text-gray-600 dark:text-white"
             >Doctor</label
           >
-          <input
-            v-model="appointment.doctor"
-            type="text"
+          <select
+            v-model="selectedDoctorId"
             id="doctor"
             class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:outline-none focus:ring focus:ring-blue-500 block w-full p-2.5"
-            placeholder="Dr. John Doe"
             required
-          />
+          >
+            <option value="">Select Doctor</option>
+            <option v-for="doctor in doctors" :key="doctor.id" :value="doctor.id">{{ doctor.name }}</option>
+          </select>
+        </div>
+
+        <div class="mb-5">
+          <label
+            for="description"
+            class="block mb-2 text-sm font-medium text-gray-600 dark:text-white"
+            >Description</label
+          >
+          <textarea
+            v-model="appointment.description"
+            id="description"
+            class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:outline-none focus:ring focus:ring-blue-500 block w-full p-2.5"
+            placeholder="Enter description"
+            required
+          ></textarea>
         </div>
 
         <div class="mb-5">
@@ -43,32 +59,13 @@
             class="block mb-2 text-sm font-medium text-gray-600 dark:text-white"
             >When</label
           >
-          <div class="relative max-w-sm">
-            <div
-              class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none"
-            >
-              <svg
-                aria-hidden="true"
-                class="w-5 h-5 text-gray-500 dark:text-gray-400"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M6 2a1 1 0 0 0-1 1v1H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-1V3a1 1 0 1 0-2 0v1H7V3a1 1 0 0 0-1-1zm8 9a1 1 0 1 0-2 0 1 1 0 0 0 2 0zM7 9a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"
-                  clip-rule="evenodd"
-                />
-              </svg>
-            </div>
-            <input
-              v-model="appointment.date"
-              datepicker
-              type="datetime-local"
-              class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:outline-none focus:ring focus:ring-blue-500 block w-full pl-10 p-2.5"
-              placeholder="Select date"
-            />
-          </div>
+          <input
+            v-model="appointment.appointment_date"
+            type="datetime-local"
+            class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:outline-none focus:ring focus:ring-blue-500 block w-full p-2.5"
+            placeholder="Select date"
+            required
+          />
         </div>
 
         <div class="flex justify-end space-x-2">
@@ -89,6 +86,7 @@
     </div>
   </div>
 </template>
+
 <script>
 import axios from 'axios';
 
@@ -97,38 +95,63 @@ export default {
   data() {
     return {
       appointment: {
-        doctor: '',
-        date: ''
-      }
+        doctor_id: '',
+        description: '', 
+        appointment_date: '',
+      },
+      doctors: [],
+      selectedDoctorId: '',
+      appointmentId: null
     };
   },
   methods: {
     fetchAppointment() {
-      axios.get(`/api/appointments/${this.$route.params.id}`)
+      axios.get(`http://127.0.0.1:8000/api/appointmentCatch/${this.appointmentId}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      })
         .then(response => {
           this.appointment = response.data;
+          this.selectedDoctorId = this.appointment.doctor_id;
         })
         .catch(error => {
           console.error('Error fetching appointment:', error);
         });
     },
-    submitAppointment() {
-      axios.put(`/api/appointments/${this.$route.params.id}`, this.appointment)
-        .then(() => {
-          this.$router.push("/patient/appointments").then(() => {
-            window.location.reload();
-          });
+    fetchDoctors() {
+      axios.get('http://127.0.0.1:8000/api/doctors')
+        .then(response => {
+          this.doctors = response.data;
         })
         .catch(error => {
-          console.error('Error updating appointment:', error);
+          console.error('Error fetching doctors:', error);
         });
     },
+    submitAppointment() {
+      this.appointment.doctor_id = this.selectedDoctorId;
+      axios.put(`http://127.0.0.1:8000/api/updatePatientAppointment/${this.appointmentId}`, this.appointment, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      })
+      .then(() => {
+        this.$router.push("/patient/appointmentsP").then(() => {
+          window.location.reload();
+        });
+      })
+      .catch(error => {
+        console.error('Error updating appointment:', error);
+      });
+    },
     goToRecords() {
-      this.$router.push("/patient/appointments");
+      this.$router.push("/patient/appointmentsP");
     }
   },
   mounted() {
+    this.appointmentId = this.$route.params.id;
     this.fetchAppointment();
+    this.fetchDoctors();
   }
 };
 </script>

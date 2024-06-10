@@ -97,6 +97,28 @@ class AppointmentController extends Controller
             return response()->json(['error' => 'Appointment not found'], 404);
         }
     }
+
+    public function updatePatientAppointment(Request $request, $id)
+    {
+        // Validate request data
+        $request->validate([
+            'doctor_id' => 'required|integer',
+            'description' => 'required|string',
+            'appointment_date' => 'required|date',
+        ]);
+    
+        DB::table('appointments')
+            ->where('id', $id)
+            ->update([
+                'doctor_id' => $request->doctor_id,
+                'description' => $request->description,
+                'appointment_date' => $request->appointment_date,
+                'updated_at' => now(),
+            ]);
+    
+        return response()->json(['message' => 'Appointment updated successfully'], 200);
+    }
+    
     
     
   
