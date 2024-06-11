@@ -22,7 +22,11 @@ Route::get('/doctors', function (Request $request) {
 
 Route::middleware('auth:sanctum')->group(function () {
 
-    Route::delete('/delete/{id}', [UserController::class, 'destroy']);
+    // Accounts
+    Route::get('users', [UserController::class, 'index']);
+    Route::post('users', [UserController::class, 'store']);
+    Route::put('users/{id}', [UserController::class, 'update']);
+    Route::delete('/delete_user/{id}', [UserController::class, 'destroy']);
 
     // Appointments
     Route::post('/appointments', [AppointmentController::class, 'store']);

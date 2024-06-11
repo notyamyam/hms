@@ -2,7 +2,7 @@
   <div class="space-y-3">
     <div class="flex justify-between">
       <div>
-        <h1 class="font-semibold text-xl text-gray-600">My Appointments</h1>
+        <h1 class="font-semibold text-xl text-gray-600">All Appointments</h1>
       </div>
     </div>
 
@@ -18,7 +18,6 @@
             <th scope="col" class="px-6 py-3">Patient Name</th>
             <th scope="col" class="px-6 py-3">Appointment Date</th>
             <th scope="col" class="px-6 py-3">Description</th>
-
           </tr>
         </thead>
         <tbody>
@@ -34,11 +33,10 @@
               {{ appointment.doctor_name }}
             </th>
             <td class="px-6 py-4 space-x-3">{{ appointment.patient_name }}</td>
-            <td class="px-6 py-4 space-x-3">{{ appointment.appointment_date }}</td>
+            <td class="px-6 py-4 space-x-3">
+              {{ appointment.appointment_date }}
+            </td>
             <td class="px-6 py-4 space-x-3">{{ appointment.description }}</td>
-
-
-        
           </tr>
         </tbody>
       </table>
@@ -47,7 +45,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from "axios";
 
 export default {
   name: "MyAppointmentsComponent",
@@ -55,62 +53,72 @@ export default {
   data() {
     return {
       appointments: [],
-      appointmentToApprove: null
+      appointmentToApprove: null,
     };
   },
 
   methods: {
     fetchAppointments() {
-
-      axios.get(`http://127.0.0.1:8000/api/getAdminAppointments` , {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    })
-        .then(response => {
+      axios
+        .get(`http://127.0.0.1:8000/api/getAdminAppointments`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        })
+        .then((response) => {
           this.appointments = response.data;
         })
-        .catch(error => {
+        .catch((error) => {
           console.error(error);
         });
     },
-approveAppointment(id) {
-  const token = localStorage.getItem("token");
+    approveAppointment(id) {
+      const token = localStorage.getItem("token");
 
-  axios.put(`http://127.0.0.1:8000/api/appointmentsApprove/${id}`, { appointment_id: id }, {
-    headers: {
-      Authorization: `Bearer ${token}`,
+      axios
+        .put(
+          `http://127.0.0.1:8000/api/appointmentsApprove/${id}`,
+          { appointment_id: id },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
+        .then(() => {
+          this.fetchAppointments();
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     },
-  })
-  .then(() => {
-    this.fetchAppointments();
-  })
-  .catch(error => {
-    console.error(error);
-  });
-  
-}, editAppointment(id) {
+    editAppointment(id) {
       this.$router.push(`/doctor/editAppointment/${id}`);
     },
     denyAppointment(id) {
       const token = localStorage.getItem("token");
 
-      axios.put(`http://127.0.0.1:8000/api/denyAppointment/${id}`, { appointment_id: id }, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then(() => {
-        this.fetchAppointments();
-      })
-      .catch(error => {
-        console.error(error);
-      });
-    }
+      axios
+        .put(
+          `http://127.0.0.1:8000/api/denyAppointment/${id}`,
+          { appointment_id: id },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
+        .then(() => {
+          this.fetchAppointments();
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    },
   },
 
   mounted() {
     this.fetchAppointments();
-  }
+  },
 };
 </script>

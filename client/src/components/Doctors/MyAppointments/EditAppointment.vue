@@ -25,7 +25,8 @@
           <label
             for="name"
             class="block mb-2 text-sm font-medium text-gray-600 dark:text-white"
-          >Name</label>
+            >Name</label
+          >
           <input
             type="text"
             id="name"
@@ -39,22 +40,22 @@
           <label
             for="date"
             class="block mb-2 text-sm font-medium text-gray-600 dark:text-white"
-          >Date and Time</label>
+            >When</label
+          >
           <input
-            type="datetime-local" 
+            type="datetime-local"
             id="date"
-            class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500"
             v-model="appointment.appointment_date"
           />
         </div>
-
-        
 
         <div class="mb-5">
           <label
             for="description"
             class="block mb-2 text-sm font-medium text-gray-600 dark:text-white"
-          >Description</label>
+            >Description</label
+          >
           <textarea
             id="description"
             class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -76,9 +77,8 @@
   </div>
 </template>
 
-
 <script>
-import axios from 'axios';
+import axios from "axios";
 
 export default {
   name: "EditAppointment",
@@ -99,49 +99,56 @@ export default {
     fetchAppointment() {
       const token = localStorage.getItem("token");
 
-      axios.get(`http://127.0.0.1:8000/api/appointmentCatch/${this.appointmentId}`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  })
-        .then(response => {
+      axios
+        .get(
+          `http://127.0.0.1:8000/api/appointmentCatch/${this.appointmentId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
+        .then((response) => {
           this.appointment = response.data;
         })
-        .catch(error => {
+        .catch((error) => {
           console.error(error);
         });
     },
 
     updateAppointment() {
-    const token = localStorage.getItem("token");
+      const token = localStorage.getItem("token");
 
-    axios.put(`http://127.0.0.1:8000/api/updateDate/${this.appointmentId}`, { appointment_date: this.appointment.appointment_date }, {
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
-    })
-    .then(response => {
-        console.log(response.data);
-        this.appointment = response.data;
+      axios
+        .put(
+          `http://127.0.0.1:8000/api/updateDate/${this.appointmentId}`,
+          { appointment_date: this.appointment.appointment_date },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
+        .then((response) => {
+          console.log(response.data);
+          this.appointment = response.data;
 
-        this.$nextTick(() => {
+          this.$nextTick(() => {
             this.appointment.appointment_date = response.data.appointment_date;
+          });
+          this.$router.push("/doctor/myappointments").then(() => {
+            window.location.reload();
+          });
+        })
+        .catch((error) => {
+          console.error(error);
         });
-        this.$router.push("/doctor/myappointments").then(() => {
-        window.location.reload();
-      });
-        
-    })
-    .catch(error => {
-        console.error(error);
-    });
-}
-
+    },
   },
 
   mounted() {
-    this.appointmentId = this.$route.params.appointmentId; 
+    this.appointmentId = this.$route.params.appointmentId;
     this.fetchAppointment();
-  }
+  },
 };
 </script>

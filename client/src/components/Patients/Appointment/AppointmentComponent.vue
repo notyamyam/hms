@@ -43,7 +43,9 @@
             >
               {{ appointment.doctor.name }}
             </th>
-            <td class="px-6 py-4 space-x-3">{{ appointment.appointment_date }}</td>
+            <td class="px-6 py-4 space-x-3">
+              {{ appointment.appointment_date }}
+            </td>
             <td class="px-6 py-4 space-x-3">{{ appointment.description }}</td>
 
             <td class="px-6 py-4 space-x-3">
@@ -71,7 +73,7 @@
   <div
     id="popup-modal"
     tabindex="-1"
-    class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full bg-gray-900 bg-opacity-50"
+    class="hidden overflow-y-auto overflow-x-hidden fixed inset-0 z-50 flex justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full bg-gray-900 bg-opacity-50"
   >
     <div class="relative p-4 w-full max-w-md max-h-full">
       <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
@@ -136,70 +138,73 @@
   </div>
 </template>
 <script>
-import axios from 'axios';
+import axios from "axios";
 
 export default {
   name: "AppointmentComponent",
   data() {
     return {
       appointments: [],
-      appointmentToCancel: null
+      appointmentToCancel: null,
     };
   },
   methods: {
-  fetchAppointments() {
-    const patientId = localStorage.getItem('userId');
+    fetchAppointments() {
+      const patientId = localStorage.getItem("userId");
 
-    axios.get(`http://127.0.0.1:8000/api/appointments?patient_id=${patientId}`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    })
-    .then(response => {
-      this.appointments = response.data;
-      console.log('Appointments:', response.data); 
-
-    })
-    .catch(error => {
-      console.error('Error fetching appointments:', error);
-
-    });
-  },
-  goToBookAppointment() {
-    this.$router.push("/patient/bookAppointmentP").then(() => {
-      window.location.reload();
-    });
-  },
-  goToEditAppointment(id) {
-    this.$router.push(`/patient/editAppointmentP/${id}`).then(() => {
-      window.location.reload();
-    });
-  },
-  confirmCancel(id) {
-    this.appointmentToCancel = id;
-    document.getElementById('popup-modal').classList.remove('hidden');
-  },
-  closeModal() {
-    document.getElementById('popup-modal').classList.add('hidden');
-  },
-  cancelAppointment() {
-    axios.delete(`http://127.0.0.1:8000/api/appointments/${this.appointmentToCancel}`,{
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },})
-      .then(() => {
-        this.fetchAppointments();
-        this.closeModal();
-      })
-      .catch(error => {
-        console.error('Error cancelling appointment:', error);
+      axios
+        .get(`http://127.0.0.1:8000/api/appointments?patient_id=${patientId}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        })
+        .then((response) => {
+          this.appointments = response.data;
+          console.log("Appointments:", response.data);
+        })
+        .catch((error) => {
+          console.error("Error fetching appointments:", error);
+        });
+    },
+    goToBookAppointment() {
+      this.$router.push("/patient/bookAppointmentP").then(() => {
+        window.location.reload();
       });
-  }
-},
+    },
+    goToEditAppointment(id) {
+      this.$router.push(`/patient/editAppointmentP/${id}`).then(() => {
+        window.location.reload();
+      });
+    },
+    confirmCancel(id) {
+      this.appointmentToCancel = id;
+      document.getElementById("popup-modal").classList.remove("hidden");
+    },
+    closeModal() {
+      document.getElementById("popup-modal").classList.add("hidden");
+    },
+    cancelAppointment() {
+      axios
+        .delete(
+          `http://127.0.0.1:8000/api/appointments/${this.appointmentToCancel}`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        )
+        .then(() => {
+          this.fetchAppointments();
+          this.closeModal();
+        })
+        .catch((error) => {
+          console.error("Error cancelling appointment:", error);
+        });
+    },
+  },
 
   mounted() {
     this.fetchAppointments();
-  }
+  },
 };
 </script>
-

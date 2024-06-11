@@ -153,7 +153,7 @@ const routes = [
       },
 
       {
-        path: "editUsers",
+        path: "editUsers/:id",
         name: "editUsers",
         component: EditUsers,
         meta: { requiresAuth: true },

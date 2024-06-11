@@ -25,7 +25,8 @@
           <label
             for="doctor"
             class="block mb-2 text-sm font-medium text-gray-600 dark:text-white"
-          >Doctor</label>
+            >Doctor</label
+          >
           <select
             v-model="selectedDoctorId"
             id="doctor"
@@ -33,7 +34,13 @@
             required
           >
             <option value="">Select Doctor</option>
-            <option v-for="doctor in doctors" :key="doctor.id" :value="doctor.id">{{ doctor.name }}</option>
+            <option
+              v-for="doctor in doctors"
+              :key="doctor.id"
+              :value="doctor.id"
+            >
+              {{ doctor.name }}
+            </option>
           </select>
         </div>
 
@@ -41,7 +48,8 @@
           <label
             for="description"
             class="block mb-2 text-sm font-medium text-gray-600 dark:text-white"
-          >Description</label>
+            >Description</label
+          >
           <textarea
             v-model="appointment.description"
             id="description"
@@ -55,11 +63,12 @@
           <label
             for="date"
             class="block mb-2 text-sm font-medium text-gray-600 dark:text-white"
-          >When</label>
+            >When</label
+          >
           <input
             v-model="appointment.appointment_date"
             type="datetime-local"
-            class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:outline-none focus:ring focus:ring-blue-500 block w-full p-2.5"
+            class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:outline-none focus:ring focus:ring-blue-500 block p-2.5"
             placeholder="Select date"
             required
           />
@@ -85,20 +94,20 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from "axios";
 
 export default {
   name: "BookAppointmentComponent",
   data() {
     return {
       appointment: {
-        doctor_id: '',
-        description: '', 
-        appointment_date: '',
-        status: 'Pending'
+        doctor_id: "",
+        description: "",
+        appointment_date: "",
+        status: "Pending",
       },
       doctors: [],
-      selectedDoctorId: ''
+      selectedDoctorId: "",
     };
   },
   created() {
@@ -106,35 +115,38 @@ export default {
   },
   methods: {
     fetchDoctors() {
-      axios.get('http://127.0.0.1:8000/api/doctors')
-        .then(response => {
+      axios
+        .get("http://127.0.0.1:8000/api/doctors")
+        .then((response) => {
           this.doctors = response.data;
         })
-        .catch(error => {
-          console.error('Error fetching doctors:', error);
+        .catch((error) => {
+          console.error("Error fetching doctors:", error);
         });
     },
     submitAppointment() {
-  this.appointment.doctor_id = this.selectedDoctorId;
-  this.appointment.patient_id = localStorage.getItem("userId");
-  axios.post('http://127.0.0.1:8000/api/appointments', this.appointment,{
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },})
-    .then(() => {
-      this.$router.push("/patient/appointmentsP").then(() => {
-        window.location.reload();
-      });
-    })
-    .catch(error => {
-      console.error('Error booking appointment:', error);
-      console.log(this.appointment.doctor_id)
-    });
-},
+      this.appointment.doctor_id = this.selectedDoctorId;
+      this.appointment.patient_id = localStorage.getItem("userId");
+      axios
+        .post("http://127.0.0.1:8000/api/appointments", this.appointment, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        })
+        .then(() => {
+          this.$router.push("/patient/appointmentsP").then(() => {
+            window.location.reload();
+          });
+        })
+        .catch((error) => {
+          console.error("Error booking appointment:", error);
+          console.log(this.appointment.doctor_id);
+        });
+    },
 
     goToRecords() {
       this.$router.push("/patient/appointmentsP");
-    }
-  }
+    },
+  },
 };
 </script>

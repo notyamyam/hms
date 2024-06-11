@@ -16,8 +16,11 @@ return new class extends Migration {
             $table->id();
             $table->unsignedBigInteger('appointment_id');
             $table->unsignedBigInteger('doctor_id');
+            $table->string('findings');
+            $table->string('payment_status');
             $table->timestamps();
 
+        
             $table->foreign('appointment_id')->references('id')->on('appointments')->onDelete('cascade');
             $table->foreign('doctor_id')->references('id')->on('users')->onDelete('cascade');
         });
