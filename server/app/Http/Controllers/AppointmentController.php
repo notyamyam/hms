@@ -30,13 +30,12 @@ class AppointmentController extends Controller
         return response()->json($appointments);
     }
     
-    public function showForDoctor(Request $request)
+    public function showForDoctor($doctor_id)
 {
-    $doctor_id = $request->query('doctor_id');
 
     $query = DB::table('appointments')
         ->join('users', 'appointments.patient_id', '=', 'users.id')
-        ->select('appointments.*', 'users.name as patient_name')
+        ->select('appointments.*', 'users.Age','users.Gender','users.name')
         ->where('appointments.doctor_id', '=', $doctor_id);
         
     $appointments = $query->get();

@@ -28,7 +28,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/appointments', [AppointmentController::class, 'store']);
     Route::get('/appointments', [AppointmentController::class, 'index']);
     Route::get('/appointments/{id}', [AppointmentController::class, 'show']);
-    Route::get('/appointments/{id}', [AppointmentController::class, 'showForDoctor']);
+    Route::get('/showForDoctor/{id}', [AppointmentController::class, 'showForDoctor']);
     Route::get('/appointmentCatch/{id}', [AppointmentController::class, 'catch']);
     Route::get('/getAdminAppointments', [AppointmentController::class, 'getAdminAppointments']);
 

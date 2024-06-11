@@ -34,11 +34,11 @@
               scope="row"
               class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
             >
-              {{ appointment.patient.name }}
+              {{ appointment.name }}
             </th>
             <td class="px-6 py-4 space-x-3">{{ appointment.appointment_date }}</td>
-            <td class="px-6 py-4 space-x-3">{{ appointment.patient.Gender }}</td>
-            <td class="px-6 py-4 space-x-3">{{ appointment.patient.Age }}</td>
+            <td class="px-6 py-4 space-x-3">{{ appointment.Gender }}</td>
+            <td class="px-6 py-4 space-x-3">{{ appointment.Age }}</td>
             <td class="px-6 py-4 space-x-3">{{ appointment.description }}</td>
             <td class="px-6 py-4 space-x-3">{{ appointment.status }}</td>
 
@@ -89,7 +89,7 @@ export default {
     fetchAppointments() {
       const doctorId = localStorage.getItem('userId');
 
-      axios.get(`http://127.0.0.1:8000/api/appointments?doctor_id=${doctorId}` , {
+      axios.get(`http://127.0.0.1:8000/api/showForDoctor/${doctorId}` , {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
