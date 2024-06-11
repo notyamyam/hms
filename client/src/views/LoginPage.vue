@@ -108,13 +108,13 @@ export default {
               redirectTo = "/admin/doctors";
               break;
             case "Doctor":
-              redirectTo = "/doctor";
+              redirectTo = "/doctor/myappointments";
               break;
             case "Patient":
-              redirectTo = "/patient/myRecords";
+              redirectTo = "/patient/recordsP";
               break;
             default:
-              redirectTo = "/patient/myRecords";
+              redirectTo = "/patient/recordsP";
           }
 
           this.$router.push(redirectTo).then(() => {

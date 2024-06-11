@@ -36,29 +36,31 @@
             >
               {{ appointment.name }}
             </th>
-            <td class="px-6 py-4 space-x-3">{{ appointment.appointment_date }}</td>
+            <td class="px-6 py-4 space-x-3">
+              {{ appointment.appointment_date }}
+            </td>
             <td class="px-6 py-4 space-x-3">{{ appointment.Gender }}</td>
             <td class="px-6 py-4 space-x-3">{{ appointment.Age }}</td>
             <td class="px-6 py-4 space-x-3">{{ appointment.description }}</td>
             <td class="px-6 py-4 space-x-3">{{ appointment.status }}</td>
 
-
             <td class="px-6 py-4 space-x-3">
               <button
+                v-if="appointment.status !== 'Approved'"
                 class="font-medium text-blue-500 hover:underline"
                 @click="editAppointment(appointment.id)"
               >
                 Edit
               </button>
-
               <button
+                v-if="appointment.status !== 'Approved'"
                 class="font-medium text-blue-500 hover:underline"
                 @click="approveAppointment(appointment.id)"
               >
                 Approve
               </button>
-              
               <button
+                v-if="appointment.status !== 'Approved'"
                 class="font-medium text-red-500 hover:underline"
                 @click="denyAppointment(appointment.id)"
               >
@@ -73,7 +75,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from "axios";
 
 export default {
   name: "MyAppointmentsComponent",
@@ -81,63 +83,74 @@ export default {
   data() {
     return {
       appointments: [],
-      appointmentToApprove: null
+      appointmentToApprove: null,
     };
   },
 
   methods: {
     fetchAppointments() {
-      const doctorId = localStorage.getItem('userId');
+      const doctorId = localStorage.getItem("userId");
 
-      axios.get(`http://127.0.0.1:8000/api/showForDoctor/${doctorId}` , {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    })
-        .then(response => {
+      axios
+        .get(`http://127.0.0.1:8000/api/showForDoctor/${doctorId}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        })
+        .then((response) => {
           this.appointments = response.data;
         })
-        .catch(error => {
+        .catch((error) => {
           console.error(error);
         });
     },
-approveAppointment(id) {
-  const token = localStorage.getItem("token");
+    approveAppointment(id) {
+      const token = localStorage.getItem("token");
 
-  axios.put(`http://127.0.0.1:8000/api/appointmentsApprove/${id}`, { appointment_id: id }, {
-    headers: {
-      Authorization: `Bearer ${token}`,
+      axios
+        .put(
+          `http://127.0.0.1:8000/api/appointmentsApprove/${id}`,
+          { appointment_id: id },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
+        .then(() => {
+          this.fetchAppointments();
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     },
-  })
-  .then(() => {
-    this.fetchAppointments();
-  })
-  .catch(error => {
-    console.error(error);
-  });
-  
-}, editAppointment(id) {
+    editAppointment(id) {
       this.$router.push(`/doctor/editAppointment/${id}`);
     },
     denyAppointment(id) {
       const token = localStorage.getItem("token");
 
-      axios.put(`http://127.0.0.1:8000/api/denyAppointment/${id}`, { appointment_id: id }, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then(() => {
-        this.fetchAppointments();
-      })
-      .catch(error => {
-        console.error(error);
-      });
-    }
+      axios
+        .put(
+          `http://127.0.0.1:8000/api/denyAppointment/${id}`,
+          { appointment_id: id },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
+        .then(() => {
+          this.fetchAppointments();
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    },
   },
 
   mounted() {
     this.fetchAppointments();
-  }
+  },
 };
 </script>

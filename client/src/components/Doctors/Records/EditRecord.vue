@@ -208,8 +208,8 @@ export default {
           const { record } = response.data;
           this.record.name = record.appointment.patient.name;
           this.record.appointmentDate = record.appointment.appointment_date;
-          this.record.gender = record.appointment.patient.Gender;
-          this.record.age = record.appointment.patient.Age;
+          this.record.gender = record.appointment.patient.gender;
+          this.record.age = record.appointment.patient.age;
           this.record.findings = record.findings;
           this.record.paymentStatus = record.payment_status;
           this.record.description = record.appointment.description;
