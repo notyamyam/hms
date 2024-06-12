@@ -9,14 +9,7 @@
     <div
       class="mt-6 relative overflow-x-auto shadow-md rounded-lg p-4 bg-white"
     >
-      <div>
-        <label class="block text-sm font-medium text-gray-700">Email</label>
-        <input
-          v-model="user.email"
-          type="email"
-          class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:outline-none focus:ring focus:ring-blue-500 block w-full p-2.5"
-        />
-      </div>
+     
 
       <div class="mt-4">
         <label class="block text-sm font-medium text-gray-700">Name</label>
@@ -114,7 +107,6 @@ export default {
     updateProfile() {
       const userId = localStorage.getItem("userId");
       const userProfile = {
-        email: this.user.email,
         name: this.user.name,
         gender: this.user.gender,
         age: this.user.age,
