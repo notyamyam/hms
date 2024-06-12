@@ -2,7 +2,7 @@
   <div class="space-y-3">
     <div class="flex justify-between">
       <div>
-        <h1 class="font-semibold text-xl text-gray-600">Medical Records</h1>
+        <h1 class="font-semibold text-xl text-gray-600">Records</h1>
       </div>
     </div>
 
@@ -61,14 +61,14 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from "axios";
 
 export default {
   name: "RecordsComponentD",
 
   data() {
     return {
-      records: []
+      records: [],
     };
   },
 
@@ -78,25 +78,26 @@ export default {
         window.location.reload();
       });
     },
-    
+
     fetchRecords() {
-      const doctorId = localStorage.getItem('userId');
-      axios.get(`http://127.0.0.1:8000/api/getDoctorsRecord/${doctorId}`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      })
-      .then(response => {
-        this.records = response.data;
-      })
-      .catch(error => {
-        console.error(error);
-      });
+      const doctorId = localStorage.getItem("userId");
+      axios
+        .get(`http://127.0.0.1:8000/api/getDoctorsRecord/${doctorId}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        })
+        .then((response) => {
+          this.records = response.data;
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     },
   },
 
   mounted() {
     this.fetchRecords();
-  }
+  },
 };
 </script>

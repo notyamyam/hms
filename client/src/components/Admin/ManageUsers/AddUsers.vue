@@ -165,7 +165,6 @@ export default {
       age: "",
       gender: "",
       user_Type: "",
-      status: 0,
       errors: {},
     };
   },
@@ -191,7 +190,6 @@ export default {
         confirm_password: this.confirm_password,
         age: this.age,
         gender: this.gender,
-        status: 0,
         user_Type: this.user_Type,
       };
 

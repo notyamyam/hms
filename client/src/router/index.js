@@ -90,7 +90,7 @@ const routes = [
       },
 
       {
-        path: "editDoctors",
+        path: "editDoctors/:id",
         name: "editDoctors",
         component: EditDoctors,
         meta: { requiresAuth: true },
@@ -111,7 +111,7 @@ const routes = [
       },
 
       {
-        path: "editPatients",
+        path: "editPatients/:id",
         name: "editPatients",
         component: EditPatients,
         meta: { requiresAuth: true },
@@ -220,7 +220,7 @@ const routes = [
         name: "editRecordsD",
         component: EditRecord,
         meta: { requiresAuth: true },
-      }      
+      },
     ],
   },
 

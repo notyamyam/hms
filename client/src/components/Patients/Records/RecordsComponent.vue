@@ -2,7 +2,7 @@
   <div class="space-y-3">
     <div class="flex justify-between">
       <div>
-        <h1 class="font-semibold text-xl text-gray-600">Medical Records</h1>
+        <h1 class="font-semibold text-xl text-gray-600">Records</h1>
       </div>
     </div>
 
@@ -21,7 +21,6 @@
             <th scope="col" class="px-6 py-3">Description</th>
             <th scope="col" class="px-6 py-3">Remarks</th>
             <th scope="col" class="px-6 py-3">Payment Status</th>
-
           </tr>
         </thead>
         <tbody>
@@ -43,8 +42,6 @@
 
             <td class="px-6 py-4 space-x-3">{{ record.findings }}</td>
             <td class="px-6 py-4 space-x-3">{{ record.payment_status }}</td>
-
-
           </tr>
         </tbody>
       </table>
@@ -53,14 +50,14 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from "axios";
 
 export default {
   name: "RecordsComponentP",
 
   data() {
     return {
-      records: []
+      records: [],
     };
   },
 
@@ -70,25 +67,26 @@ export default {
         window.location.reload();
       });
     },
-    
+
     fetchRecords() {
-      const patientId = localStorage.getItem('userId');
-      axios.get(`http://127.0.0.1:8000/api/getPatientRecord/${patientId}`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      })
-      .then(response => {
-        this.records = response.data;
-      })
-      .catch(error => {
-        console.error(error);
-      });
+      const patientId = localStorage.getItem("userId");
+      axios
+        .get(`http://127.0.0.1:8000/api/getPatientRecord/${patientId}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        })
+        .then((response) => {
+          this.records = response.data;
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     },
   },
 
   mounted() {
     this.fetchRecords();
-  }
+  },
 };
 </script>

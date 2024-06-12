@@ -20,7 +20,6 @@
             <th scope="col" class="px-6 py-3">Description</th>
             <th scope="col" class="px-6 py-3">Remarks</th>
             <th scope="col" class="px-6 py-3">Payment Status</th>
-
           </tr>
         </thead>
         <tbody>
@@ -42,8 +41,6 @@
 
             <td class="px-6 py-4 space-x-3">{{ record.findings }}</td>
             <td class="px-6 py-4 space-x-3">{{ record.payment_status }}</td>
-
-           
           </tr>
         </tbody>
       </table>
@@ -52,14 +49,14 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from "axios";
 
 export default {
   name: "RecordsComponentD",
 
   data() {
     return {
-      records: []
+      records: [],
     };
   },
 
@@ -69,24 +66,25 @@ export default {
         window.location.reload();
       });
     },
-    
+
     fetchRecords() {
-      axios.get(`http://127.0.0.1:8000/api/getAdminRecord`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      })
-      .then(response => {
-        this.records = response.data;
-      })
-      .catch(error => {
-        console.error(error);
-      });
+      axios
+        .get(`http://127.0.0.1:8000/api/getAdminRecord`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        })
+        .then((response) => {
+          this.records = response.data;
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     },
   },
 
   mounted() {
     this.fetchRecords();
-  }
+  },
 };
 </script>
