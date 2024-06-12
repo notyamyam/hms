@@ -9,8 +9,6 @@
     <div
       class="mt-6 relative overflow-x-auto shadow-md rounded-lg p-4 bg-white"
     >
-     
-
       <div class="mt-4">
         <label class="block text-sm font-medium text-gray-700">Name</label>
         <input
@@ -114,9 +112,10 @@ export default {
 
       axios
         .put(`http://127.0.0.1:8000/api/update/${userId}`, userProfile)
-        .then((response) => {
-          console.log("Profile updated successfully");
-          console.log(response.data);
+        .then(() => {
+          this.$router.push("/doctor/myappointments").then(() => {
+            window.location.reload();
+          });
         })
         .catch((error) => {
           console.error(error);

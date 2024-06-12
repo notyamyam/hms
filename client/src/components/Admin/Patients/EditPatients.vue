@@ -38,54 +38,6 @@
 
         <div>
           <label
-            for="email"
-            class="block mb-2 text-sm font-medium text-gray-600 dark:text-white"
-            >Email</label
-          >
-          <input
-            type="email"
-            id="email"
-            v-model="user.email"
-            class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:outline-none focus:ring focus:ring-blue-500 block w-full p-2.5"
-            placeholder="doctor@example.com"
-            required
-          />
-        </div>
-
-        <div>
-          <label
-            for="password"
-            class="block mb-2 text-sm font-medium text-gray-600 dark:text-white"
-            >Password</label
-          >
-          <input
-            type="password"
-            id="password"
-            v-model="user.password"
-            class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:outline-none focus:ring focus:ring-blue-500 block w-full p-2.5"
-            placeholder="••••••••"
-            required
-          />
-        </div>
-
-        <div>
-          <label
-            for="confirm_password"
-            class="block mb-2 text-sm font-medium text-gray-600 dark:text-white"
-            >Confirm Password</label
-          >
-          <input
-            type="password"
-            id="confirm_password"
-            v-model="user.confirm_password"
-            class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:outline-none focus:ring focus:ring-blue-500 block w-full p-2.5"
-            placeholder="••••••••"
-            required
-          />
-        </div>
-
-        <div>
-          <label
             for="age"
             class="block mb-2 text-sm font-medium text-gray-600 dark:text-white"
             >Age</label

@@ -47,12 +47,12 @@ public function getPatientRecord($patientId)
 {
     $records = DB::table('records')
         ->join('appointments', 'records.appointment_id', '=', 'appointments.id')
-        ->join('users', 'appointments.patient_id', '=', 'users.id')
+        ->join('users as doctors', 'appointments.doctor_id', '=', 'doctors.id')
         ->select(
             'records.*',
-            'users.name as patient_name',
-            'users.gender as patient_gender',
-            'users.age as patient_age',
+            'doctors.name as doctor_name',
+            'doctors.gender as doctor_gender',
+            'doctors.age as doctor_age',
             'appointments.appointment_date',
             'appointments.description'
 

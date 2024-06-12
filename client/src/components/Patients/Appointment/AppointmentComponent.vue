@@ -150,17 +150,20 @@ export default {
   },
   methods: {
     fetchAppointments() {
-      const patientId = localStorage.getItem("userId");
+      const userId = localStorage.getItem("userId");
 
       axios
-        .get(`http://127.0.0.1:8000/api/appointments?patient_id=${patientId}`, {
+        .get(`http://127.0.0.1:8000/api/appointments?user_id=${userId}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         })
         .then((response) => {
-          this.appointments = response.data;
-          console.log("Appointments:", response.data);
+          console.log(response.data);
+          this.appointments = response.data.filter(
+            (appointment) => appointment.patient_id === parseInt(userId)
+          );
+          console.log("Filtered Appointments:", this.appointments);
         })
         .catch((error) => {
           console.error("Error fetching appointments:", error);

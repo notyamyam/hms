@@ -14,7 +14,7 @@
           class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
         >
           <tr>
-            <th scope="col" class="px-6 py-3">Name</th>
+            <th scope="col" class="px-6 py-3">Doctor</th>
             <th scope="col" class="px-6 py-3">When</th>
             <th scope="col" class="px-6 py-3">Gender</th>
             <th scope="col" class="px-6 py-3">Age</th>
@@ -33,11 +33,11 @@
               scope="row"
               class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
             >
-              {{ record.patient_name }}
+              {{ record.doctor_name }}
             </th>
             <td class="px-6 py-4 space-x-3">{{ record.appointment_date }}</td>
-            <td class="px-6 py-4 space-x-3">{{ record.patient_gender }}</td>
-            <td class="px-6 py-4 space-x-3">{{ record.patient_age }}</td>
+            <td class="px-6 py-4 space-x-3">{{ record.doctor_gender }}</td>
+            <td class="px-6 py-4 space-x-3">{{ record.doctor_age }}</td>
             <td class="px-6 py-4 space-x-3">{{ record.description }}</td>
 
             <td class="px-6 py-4 space-x-3">{{ record.findings }}</td>
@@ -77,6 +77,7 @@ export default {
           },
         })
         .then((response) => {
+          console.log(response.data);
           this.records = response.data;
         })
         .catch((error) => {

@@ -6,7 +6,17 @@
       </div>
     </div>
 
-    <div class="relative overflow-x-auto shadow-md rounded-lg p-4 bg-white">
+    <div
+      v-if="appointments.length === 0"
+      class="mt-6 text-gray-600 text-center"
+    >
+      <p>No appointments available.</p>
+    </div>
+
+    <div
+      v-else
+      class="relative overflow-x-auto shadow-md rounded-lg p-4 bg-white"
+    >
       <table
         class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400"
       >
